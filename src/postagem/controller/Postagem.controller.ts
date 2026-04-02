@@ -16,7 +16,7 @@ import { PostagemService } from '../services/postagem.service';
 //Porta de entrada,
 // Recebe a requisição HTTP, valida os dados de entrada,
 // e chama o Service. Não tem lógica de negócio aqui.
-@Controller('/Postagens')
+@Controller('/postagens')
 export class PostagemController {
   constructor(private readonly postagemService: PostagemService) {}
 
@@ -26,15 +26,15 @@ findAll(): Promise<Postagem[]> {
     return this.postagemService.findAll();
   }
 
-@Get('/:id')
-  findById(@Param('id', ParseIntPipe) id: number) {
-    return this.postagemService.findById(id);
-  }
 @Get('/titulo/:titulo')
 @HttpCode(HttpStatus.OK)
   findAllByTitulo(@Param('titulo') titulo: string): Promise<Postagem[]>{
     return this.postagemService.findAllByTitulo(titulo);
 }
+  @Get('/:id')
+  findById(@Param('id', ParseIntPipe) id: number) {
+    return this.postagemService.findById(id);
+  }
 
 @Post()
   create(@Body() postagem: Postagem): Promise<Postagem> {
@@ -44,7 +44,7 @@ findAll(): Promise<Postagem[]> {
   @Delete('/:id')
   @HttpCode(HttpStatus.NO_CONTENT)
   delete(@Param('id', ParseIntPipe) id: number){
-    return
+    return this.postagemService.delete(id);
   }
 @Put()
 @HttpCode(HttpStatus.OK)

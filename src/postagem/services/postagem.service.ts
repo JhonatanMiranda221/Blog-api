@@ -48,19 +48,56 @@ export class PostagemService {
         })
     }
 
-    async create(postagem: Postagem): Promise<Postagem> {
+    /*async create(postagem: Postagem): Promise<Postagem> {
         await this.temaService.findById(postagem.tema.id)
         return await this.postagemRepository.save(postagem);
     }
+*/
+async create(postagem: Postagem): Promise<Postagem> {
+       
+        if (postagem.tema != null) {
+           
+            let tema = await this.temaService.findById(postagem.tema.id)
+ 
+            if (!tema)
+                throw new HttpException('Tema não encontrado!', HttpStatus.NOT_FOUND);
+ 
+              return await this.postagemRepository.save(postagem);
+        }else{
+            throw new HttpException('Tema nao pode ser nulo!', HttpStatus.NOT_FOUND);
+        }
+   
+    }
 
-    async update(postagem: Postagem): Promise<Postagem> {
+   /* async update(postagem: Postagem): Promise<Postagem> {
         
         await this.temaService.findById(postagem.tema.id)
         await this.findById(postagem.id);
         
         return await this.postagemRepository.save(postagem);
     }
-
+*/
+async update(postagem: Postagem): Promise<Postagem> {
+       
+        let buscaPostagem: Postagem = await this.findById(postagem.id);
+ 
+        if (!buscaPostagem || !postagem.id)
+            throw new HttpException('Postagem não encontrada!', HttpStatus.NOT_FOUND);
+ 
+        if (postagem.tema){
+           
+            let tema = await this.temaService.findById(postagem.tema.id)
+               
+            if (!tema)
+                throw new HttpException('Tema não encontrado!', HttpStatus.NOT_FOUND);
+               
+            return await this.postagemRepository.save(postagem);
+   
+        }else{
+            throw new HttpException('Tema nao pode ser nulo!', HttpStatus.NOT_FOUND);
+        }
+       
+    }
     async delete(id: number): Promise<DeleteResult> {
         
         await this.findById(id);

@@ -3,6 +3,7 @@
     "module": "nodenext",
     "moduleResolution": "nodenext", //"bundler",
     "resolvePackageJsonExports": true,
+    "types": ["jest"],
     "esModuleInterop": true,
     "isolatedModules": true,
     "declaration": true,
